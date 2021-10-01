@@ -1,0 +1,28 @@
+version: "3"
+services:
+  eureka:
+    build: ./eureka-server
+    container_name: eureka-server
+    restart: always
+    ports:
+      - "8761:8761"
+#
+  gateway:
+    build: ./gateway-server
+    container_name: gateway-server
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - eureka
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Asia/Seoul
